@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Voting page</title>
+    <link rel="stylesheet" href="/js/jquery-ui.css">
+</head>
+
+<body>
+    <h1>Voting page</h1>
+
+    <div id="slider"></div>
+
+    <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery-2.1.1.min.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script>
+    var socket = io();
+    $(function() {
+        $("#slider").slider({
+            value: 0,
+            min: 0,
+            max: 100,
+            step: 5,
+            slide: function(event, ui) {
+                $("#amount").val(ui.value);
+            }
+        });
+        $("#amount").val($("#slider").slider("value"));
+    });
+
+    socket.on('gather', function() {
+        socket.emit('my score', $("#slider").slider("value"));
+        alert("thanks for your score - "+$("#slider").slider("value"));
+    });
+    </script>
+</body>
+
+</html>
