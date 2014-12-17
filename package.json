@@ -1,0 +1,9 @@
+{
+  "name": "voting-webapp",
+  "version": "0.0.1",
+  "description": "An app that uses sockets to take a load of votes and provide a result",
+  "dependencies": {
+    "express": "^4.10.6",
+    "socket.io": "^1.2.1"
+  }
+}
