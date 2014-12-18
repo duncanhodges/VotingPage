@@ -2,21 +2,33 @@
 <html>
 
 <head>
-    <title>Vote gathering page</title>  
+    <title>Vote gathering page</title>
 </head>
 
 <body>
+
+    <input type="text" value="0" class="dial">
+
     <ul id="results"></ul>
-    
+
     <button id="gatherButton">Gather results</button>
     <button id="clearButton">Clear</button>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/jquery-2.1.1.min.js"></script>
+    <script src="/js/jquery.knob.js"></script>
+
     <script>
     var socket = io();
-    
-    $('#gatherButton').click(function(){
+
+    $(function() {
+        $(".dial").knob({
+            'min': 0,
+            'max': 100
+        });
+    });
+
+    $('#gatherButton').click(function() {
         $('#results').empty();
         socket.emit('gather');
     });
@@ -24,9 +36,25 @@
     $('#clearButton').click(function() {
         $('#results').empty();
     });
-    
+
     socket.on('push results', function(msg) {
-       $('#results').append($('<li>').text(msg)); 
+        $('#results').append($('<li>').text(msg));
+        var scores = [];
+
+        $('ul li').each(function() {
+            scores.push( $(this).text());
+        });
+
+        var average = 0;
+
+        for( var ii =0; ii < scores.length; ii++) {
+            average += parseInt( scores[ii], 10 );
+        }
+        average = average / scores.length;
+
+        $(".dial")
+            .val(average)
+            .trigger('change');
     });
     </script>
 </body>

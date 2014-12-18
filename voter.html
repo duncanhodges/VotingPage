@@ -3,37 +3,32 @@
 
 <head>
     <title>Voting page</title>
-    <link rel="stylesheet" href="/js/jquery-ui.css">
 </head>
 
 <body>
     <h1>Voting page</h1>
 
-    <div id="slider"></div>
-
-    <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    <input type="text" value="0" class="dial">
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/jquery-2.1.1.min.js"></script>
-    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/jquery.knob.js"></script>
+
     <script>
     var socket = io();
     $(function() {
-        $("#slider").slider({
-            value: 0,
-            min: 0,
-            max: 100,
-            step: 5,
-            slide: function(event, ui) {
-                $("#amount").val(ui.value);
-            }
+        $(".dial").knob({
+            'min': 0,
+            'max': 100
         });
-        $("#amount").val($("#slider").slider("value"));
     });
 
     socket.on('gather', function() {
-        socket.emit('my score', $("#slider").slider("value"));
-        alert("thanks for your score - "+$("#slider").slider("value"));
+        socket.emit('my score', $(".dial").val());
+        alert("thanks for your score - " + $(".dial").val());
+        $(".dial")
+            .val(0)
+            .trigger('change');
     });
     </script>
 </body>
