@@ -3,17 +3,20 @@
 
 <head>
     <title>Vote gathering page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/toastr.min.css" />
 </head>
 
-<body>
+<body class="display">
 
-    <input type="text" value="0" class="dial">
+     <div id="dialHolder">
+        <input type="text" value="50" data-width="400" data-height="400" class="dial">
+        <button id="gatherButton" class="btn">Gather results</button><br>
+        <button id="clearButton" class="btn">Clear</button>
+    </div>
 
-    <ul id="results"></ul>
-
-    <button id="gatherButton">Gather results</button>
-    <button id="clearButton">Clear</button>
-
+    <ul id="results" style="display:none;"></ul>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/jquery-2.1.1.min.js"></script>
     <script src="/js/jquery.knob.js"></script>
@@ -24,8 +27,11 @@
     $(function() {
         $(".dial").knob({
             'min': 0,
-            'max': 100
-        });
+            'max': 100,
+            'fgColor': '#311B92',
+            'inputColor': '#311B92',
+            'readOnly': true,
+        });        
     });
 
     $('#gatherButton').click(function() {
@@ -42,13 +48,13 @@
         var scores = [];
 
         $('ul li').each(function() {
-            scores.push( $(this).text());
+            scores.push($(this).text());
         });
 
         var average = 0;
 
-        for( var ii =0; ii < scores.length; ii++) {
-            average += parseInt( scores[ii], 10 );
+        for (var ii = 0; ii < scores.length; ii++) {
+            average += parseInt(scores[ii], 10);
         }
         average = average / scores.length;
 

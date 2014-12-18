@@ -3,34 +3,44 @@
 
 <head>
     <title>Voting page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/toastr.min.css" />
 </head>
 
 <body>
     <h1>Voting page</h1>
 
-    <input type="text" value="0" class="dial">
+    <div id="dialHolder">
+        <input type="text" value="50" data-width="400" data-height="400" class="dial">
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/jquery-2.1.1.min.js"></script>
     <script src="/js/jquery.knob.js"></script>
+    <script src="/js/toastr.min.js"></script>
 
     <script>
     var socket = io();
     $(function() {
         $(".dial").knob({
             'min': 0,
-            'max': 100
+            'max': 100,
+            'fgColor': '#004D40',
+            'inputColor': '#004D40',
         });
     });
 
     socket.on('gather', function() {
-        socket.emit('my score', $(".dial").val());
-        alert("thanks for your score - " + $(".dial").val());
+        var myScore = $(".dial").val();
+        socket.emit('my score', myScore);
+        toastr.info("Accepted score of " + myScore);
         $(".dial")
-            .val(0)
+            .val(50)
             .trigger('change');
     });
     </script>
+
 </body>
 
 </html>
